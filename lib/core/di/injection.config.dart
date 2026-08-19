@@ -68,10 +68,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i752.GetPokemonDetail(gh<_i837.PokemonRepository>()));
     gh.factory<_i452.GetPokemonPage>(
         () => _i452.GetPokemonPage(gh<_i837.PokemonRepository>()));
-    gh.factory<_i746.SearchPokemon>(
-        () => _i746.SearchPokemon(gh<_i837.PokemonRepository>()));
     gh.factory<_i822.GetSimilarPokemon>(
         () => _i822.GetSimilarPokemon(gh<_i837.PokemonRepository>()));
+    gh.factory<_i746.SearchPokemon>(
+        () => _i746.SearchPokemon(gh<_i837.PokemonRepository>()));
     gh.factory<_i115.PokemonDetailBloc>(() => _i115.PokemonDetailBloc(
           gh<_i752.GetPokemonDetail>(),
           gh<_i822.GetSimilarPokemon>(),

@@ -4,6 +4,14 @@ import 'package:injectable/injectable.dart';
 import '../models/pokemon_model.dart';
 
 abstract class PokemonRemoteDataSource {
+  /// Fetches list items for a specific set of Pokémon IDs (e.g. a
+  /// curated featured set). Order of [ids] is preserved in the result.
+  /// This datasource doesn't know or care *which* ids matter — that's
+  /// a decision made above it, in the repository/domain layer.
+  Future<List<PokemonListItemModel>> fetchPokemonByIds(List<int> ids);
+
+  /// General list endpoint — kept for a genuine future pagination
+  /// feature; not currently exercised by the fixed 4-Pokémon app.
   Future<List<PokemonListItemModel>> fetchPokemonList({
     required int limit,
     required int offset,
@@ -13,38 +21,34 @@ abstract class PokemonRemoteDataSource {
 }
 
 @LazySingleton(as: PokemonRemoteDataSource)
-class PokemonRemoteDataSourceImpl
-    implements PokemonRemoteDataSource {
+class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
   final Dio _dio;
 
   PokemonRemoteDataSourceImpl(this._dio);
+
+  @override
+  Future<List<PokemonListItemModel>> fetchPokemonByIds(
+      List<int> ids,
+      ) async {
+    // Name is a placeholder here — the repository always fetches full
+    // detail for every item immediately after this call anyway (to get
+    // types), and overwrites the name with the real one from that
+    // response before anything is cached or displayed.
+    return ids
+        .map(
+          (id) => PokemonListItemModel(
+        name: 'pokemon-$id',
+        url: 'https://pokeapi.co/api/v2/pokemon/$id/',
+      ),
+    )
+        .toList();
+  }
 
   @override
   Future<List<PokemonListItemModel>> fetchPokemonList({
     required int limit,
     required int offset,
   }) async {
-    // The assessment design specifies these four Pokémon
-    // as the initial list.
-    //
-    // Their PokéAPI IDs are:
-    // Charizard = 6
-    // Ivysaur   = 2
-    // Raticate  = 20
-    // Beedrill  = 15
-    if (offset == 0) {
-      const pokemonIds = [6, 2, 20, 15];
-
-      return pokemonIds
-          .map(
-            (id) => PokemonListItemModel(
-          name: _pokemonName(id),
-          url: 'https://pokeapi.co/api/v2/pokemon/$id/',
-        ),
-      )
-          .toList();
-    }
-
     final response = await _dio.get(
       '/pokemon',
       queryParameters: {
@@ -71,20 +75,5 @@ class PokemonRemoteDataSourceImpl
     return PokemonModel.fromJson(
       response.data as Map<String, dynamic>,
     );
-  }
-
-  String _pokemonName(int id) {
-    switch (id) {
-      case 6:
-        return 'charizard';
-      case 2:
-        return 'ivysaur';
-      case 20:
-        return 'raticate';
-      case 15:
-        return 'beedrill';
-      default:
-        return 'pokemon-$id';
-    }
   }
 }
