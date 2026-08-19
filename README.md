@@ -34,7 +34,7 @@ flutter run
 - `flutter_svg` renders the Detail screen's required `dream_world` sprite
 - Home View, List View (four featured Pokémon, no pagination UI), full-screen Detail View (About/Stats/Similar tabs, functional Similar tab), center Theme Picker modal
 
-## Deliberate design decisions (confirmed with assessment supervisor)
+## Deliberate design decisions ("1." confirmed with assessment supervisor)
 1. **Fixed 4-Pokémon dataset, no pagination UI.** The app shows exactly Charizard, Ivysaur, Raticate, and Beedrill, matching the Figma reference — not a general page-through-hundreds app. The curated ID list lives in `lib/features/pokemon/domain/featured_pokemon.dart` (domain layer, not buried in the networking code) so the remote datasource stays a generic "fetch these ids" client.
 2. **Detail screen is full-screen**, not a bottom-sheet modal — built to match the Figma reference over the written spec's literal "modal" wording.
 3. **Detail hero uses a flat selected theme color**, not a computed dominant-color gradient — intentional, so the color always exactly matches what's picked in the Theme Picker with zero shade drift.
