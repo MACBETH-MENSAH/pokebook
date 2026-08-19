@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pokebook/features/pokemon/domain/entities/paginated_pokemon.dart';
 import 'package:pokebook/features/pokemon/domain/entities/pokemon.dart';
 
+/// How i did it
 /// Proves the pagination *math* the requirements doc describes: with 4
 /// Pokémon total and a page size of 2, you get exactly 2 pages, page 1
 /// holds items 1-2 and page 2 holds items 3-4. The repository
